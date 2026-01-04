@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Tracker (Basic)</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f4f4f9; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); text-align: center; }
+        input { padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px; }
+        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        #result { margin-top: 20px; text-align: left; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Tracker Tool</h2>
+    <p>Enter number with country code (e.g., 919876543210)</p>
+    <input type="text" id="phoneNumber" placeholder="91XXXXXXXXXX">
+    <br>
+    <button onclick="trackInfo()">Track Details</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    async function trackInfo() {
+        const number = document.getElementById('phoneNumber').value;
+        const resultDiv = document.getElementById('result');
+        
+        // c9b33c8db46002f405198d7b3baf7b35 (https://numverify.com/ se milegi)
+        const apiKey = 'YOUR_FREE_API_KEY'; 
+
+        if(!number) {
+            alert("Please enter a number");
+            return;
+        }
+
+        resultDiv.innerHTML = "Fetching data...";
+
+        try {
+            const response = await fetch(`http://apilayer.net/api/validate?access_key=${apiKey}&number=${number}`);
+            const data = await response.json();
+
+            if(data.valid) {
+                resultDiv.innerHTML = `
+                    <hr>
+                    <p><b>Valid:</b> ✅ Yes</p>
+                    <p><b>Country:</b> ${data.country_name}</p>
+                    <p><b>Location:</b> ${data.location || 'Not Available'}</p>
+                    <p><b>Carrier:</b> ${data.carrier}</p>
+                    <p><b>Line Type:</b> ${data.line_type}</p>
+                `;
+            } else {
+                resultDiv.innerHTML = "<p class='error'>Invalid number format!</p>";
+            }
+        } catch (error) {
+            resultDiv.innerHTML = "<p class='error'>Error connecting to API.</p>";
+        }
+    }
+</script>
+
+</body>
+</html>
