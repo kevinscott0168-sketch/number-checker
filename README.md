@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 import requests
 
-app = Flask(__name__)
+app = Flask(__track__)
 
-# Apni Numverify API Key yahan dalein
+# Apni Numverify API Key
 API_KEY = 'c9b33c8db46002f405198d7b3baf7b35'
 
 @app.route('/')
